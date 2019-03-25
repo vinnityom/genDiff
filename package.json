@@ -2,9 +2,13 @@
   "name": "artyoms-gendiff",
   "version": "1.0.0",
   "description": "my own gendiff app for study project",
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "NODE_ENV=production babel src --out-dir dist --source-maps inline"
+    "build": "NODE_ENV=production babel src --out-dir dist --source-maps inline",
+    "prepublishOnly": "npm run build"
   },
   "repository": {
     "type": "git",
