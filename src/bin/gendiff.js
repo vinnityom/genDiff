@@ -6,7 +6,7 @@ program
   .version(version)
   .description('Compares two configuration files and shows a difference.')
   .option('-f, --format', 'output format')
-  .arguments('<firstConfig>', '<secondConfig>')
+  .arguments('<firstConfig> <secondConfig>')
   .parse(process.argv);
 
 console.log('app is running');
