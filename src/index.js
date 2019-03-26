@@ -7,18 +7,18 @@ const signsByOrder = {
 };
 
 export default (filepath1, filepath2) => {
-  const before = JSON.parse(fs.readFileSync(filepath1, 'utf-8'));
-  const after = JSON.parse(fs.readFileSync(filepath2, 'utf-8'));
+  const contentBefore = JSON.parse(fs.readFileSync(filepath1, 'utf-8'));
+  const contentAfter = JSON.parse(fs.readFileSync(filepath2, 'utf-8'));
 
-  const propertiesOfBefore = Object.keys(before);
-  const propertiessOfAfter = Object.keys(after);
+  const propertiesOfBefore = Object.keys(contentBefore);
+  const propertiessOfAfter = Object.keys(contentAfter);
 
   const [
     compareFrom,
     compareTo,
     orderOfComparisson,
   ] = propertiesOfBefore.length >= propertiessOfAfter.length
-    ? [before, after, 'beforeToAfter'] : [after, before, 'afterToBefore'];
+    ? [contentBefore, contentAfter, 'beforeToAfter'] : [contentAfter, contentBefore, 'afterToBefore'];
 
   const allProperties = uniq([...propertiesOfBefore, ...propertiessOfAfter]);
 
