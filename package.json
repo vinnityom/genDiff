@@ -41,6 +41,7 @@
     "jest": "^24.5.0"
   },
   "dependencies": {
-    "commander": "^2.19.0"
+    "commander": "^2.19.0",
+    "lodash": "^4.17.11"
   }
 }
