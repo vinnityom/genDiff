@@ -6,5 +6,8 @@
 ## Install
 [![asciicast](https://asciinema.org/a/oe6bbUDFvecHL7SiB0XApgA4k.svg)](https://asciinema.org/a/oe6bbUDFvecHL7SiB0XApgA4k)
 
-## And use
+## Get help if you need
 [![asciicast](https://asciinema.org/a/2NkjTF3BJsW4el4QEtUguolDD.svg)](https://asciinema.org/a/2NkjTF3BJsW4el4QEtUguolDD)
+
+## And use!
+[![asciicast](https://asciinema.org/a/scIYaKzF41R2mcUstGXlaaxul.svg)](https://asciinema.org/a/scIYaKzF41R2mcUstGXlaaxul)
