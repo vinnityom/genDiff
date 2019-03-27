@@ -1,12 +1,18 @@
 import _ from 'lodash';
 import fs from 'fs';
 import path from 'path';
+import parse from './parsers';
 
 const getPath = pathString => path.resolve(pathString);
 
+const getContent = (filepath) => {
+  const extention = path.extname(filepath);
+  return parse(extention)(fs.readFileSync(getPath(filepath), 'utf-8'));
+};
+
 export default (filepath1, filepath2) => {
-  const contentBefore = JSON.parse(fs.readFileSync(getPath(filepath1), 'utf-8'));
-  const contentAfter = JSON.parse(fs.readFileSync(getPath(filepath2), 'utf-8'));
+  const contentBefore = getContent(filepath1);
+  const contentAfter = getContent(filepath2);
 
   const allProperties = _.union(_.keys(contentBefore), _.keys(contentAfter));
 
