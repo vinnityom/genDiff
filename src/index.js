@@ -1,4 +1,4 @@
-import { has, uniq } from 'lodash';
+import { has, uniq, union, keys } from 'lodash';
 import fs from 'fs';
 import path from 'path';
 
@@ -8,9 +8,7 @@ export default (filepath1, filepath2) => {
   const contentBefore = JSON.parse(fs.readFileSync(getPath(filepath1), 'utf-8'));
   const contentAfter = JSON.parse(fs.readFileSync(getPath(filepath2), 'utf-8'));
 
-  const propertiesOfBefore = Object.keys(contentBefore);
-  const propertiessOfAfter = Object.keys(contentAfter);
-  const allProperties = uniq([...propertiesOfBefore, ...propertiessOfAfter]);
+  const allProperties = uniq(union(keys(contentBefore), keys(contentAfter)));
 
   const arr = allProperties.reduce((acc, property) => {
     const valueOfFrom = contentBefore[property];
