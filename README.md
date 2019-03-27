@@ -13,5 +13,8 @@
 ### Works with JSON
 [![asciicast](https://asciinema.org/a/scIYaKzF41R2mcUstGXlaaxul.svg)](https://asciinema.org/a/scIYaKzF41R2mcUstGXlaaxul)
 
-### And yaml
+### yaml
 [![asciicast](https://asciinema.org/a/ESsvce4pQuz61gvj9L6AR9aKe.svg)](https://asciinema.org/a/ESsvce4pQuz61gvj9L6AR9aKe)
+
+### and ini
+[![asciicast](https://asciinema.org/a/eOUguUKBGeieiz4auCSqP7dpP.svg)](https://asciinema.org/a/eOUguUKBGeieiz4auCSqP7dpP)
