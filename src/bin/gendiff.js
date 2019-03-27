@@ -8,7 +8,7 @@ program
   .description('Compares two configuration files and shows a difference.')
   .option('-f, --format', 'output format')
   .arguments('<firstConfig> <secondConfig>')
-  .action((firstConfig, secondConfig) => {
-    console.log(compareConfigs(firstConfig, secondConfig));
+  .action((filepath1, filepath2) => {
+    console.log(compareConfigs(filepath1, filepath2));
   })
   .parse(process.argv);
