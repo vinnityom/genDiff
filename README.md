@@ -10,4 +10,8 @@
 [![asciicast](https://asciinema.org/a/2NkjTF3BJsW4el4QEtUguolDD.svg)](https://asciinema.org/a/2NkjTF3BJsW4el4QEtUguolDD)
 
 ## And use!
+### Works with JSON
 [![asciicast](https://asciinema.org/a/scIYaKzF41R2mcUstGXlaaxul.svg)](https://asciinema.org/a/scIYaKzF41R2mcUstGXlaaxul)
+
+### And yaml
+[![asciicast](https://asciinema.org/a/ESsvce4pQuz61gvj9L6AR9aKe.svg)](https://asciinema.org/a/ESsvce4pQuz61gvj9L6AR9aKe)
