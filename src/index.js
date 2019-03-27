@@ -1,4 +1,4 @@
-import { has, uniq, union, keys } from 'lodash';
+import _ from 'lodash';
 import fs from 'fs';
 import path from 'path';
 
@@ -8,13 +8,13 @@ export default (filepath1, filepath2) => {
   const contentBefore = JSON.parse(fs.readFileSync(getPath(filepath1), 'utf-8'));
   const contentAfter = JSON.parse(fs.readFileSync(getPath(filepath2), 'utf-8'));
 
-  const allProperties = uniq(union(keys(contentBefore), keys(contentAfter)));
+  const allProperties = _.union(_.keys(contentBefore), _.keys(contentAfter));
 
   const arr = allProperties.reduce((acc, property) => {
     const valueOfFrom = contentBefore[property];
     const valueOfTo = contentAfter[property];
 
-    if (has(contentBefore, property) && has(contentAfter, property)) {
+    if (_.has(contentBefore, property) && _.has(contentAfter, property)) {
       if (valueOfFrom === valueOfTo) {
         return [...acc, `  ${property}: ${valueOfFrom}`];
       }
@@ -26,7 +26,7 @@ export default (filepath1, filepath2) => {
       ];
     }
 
-    if (has(contentAfter, property)) {
+    if (_.has(contentAfter, property)) {
       return [...acc, `+ ${property}: ${valueOfTo}`];
     }
 
