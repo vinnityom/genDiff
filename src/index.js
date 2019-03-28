@@ -11,47 +11,44 @@ const getContent = (filepath) => {
   return parse(extention)(fs.readFileSync(getPath(filepath), 'utf-8'));
 };
 
-export default (filepath1, filepath2) => {
-  const contentBefore = getContent(filepath1);
-  const contentAfter = getContent(filepath2);
+const buildAST = (property, status, value, children) => ({
+  property,
+  status,
+  value,
+  children,
+});
 
-  const allProperties = _.union(_.keys(contentBefore), _.keys(contentAfter));
+const buildDiff = (contentBefore, contentAfter) => {
+  const properties = _.union(_.keys(contentBefore), _.keys(contentAfter));
 
-  const arr = allProperties.map((property) => {
+  return properties.map((property) => {
     const valueOfFrom = contentBefore[property];
     const valueOfTo = contentAfter[property];
 
     if (_.has(contentBefore, property) && _.has(contentAfter, property)) {
       if (valueOfFrom === valueOfTo) {
-        return {
-          property,
-          status: 'unchanged',
-          value: valueOfFrom,
-        };
+        return buildAST(property, 'unchanged', valueOfFrom);
       }
 
-      return {
-        property,
-        status: 'changed',
-        valueBefore: valueOfFrom,
-        valueAfter: valueOfTo,
-      };
+      if (_.isObject(valueOfFrom) && _.isObject(valueOfTo)) {
+        return buildAST(property, 'unchanged', null, buildDiff(valueOfFrom, valueOfTo));
+      }
+
+      return buildAST(property, 'changed', { before: valueOfFrom, after: valueOfTo });
     }
 
     if (_.has(contentAfter, property)) {
-      return {
-        property,
-        status: 'added',
-        value: valueOfTo,
-      };
+      return buildAST(property, 'added', valueOfTo);
     }
 
-    return {
-      property,
-      status: 'deleted',
-      value: valueOfFrom,
-    };
+    return buildAST(property, 'deleted', valueOfFrom);
   });
+};
+
+export default (filepath1, filepath2) => {
+  const contentBefore = getContent(filepath1);
+  const contentAfter = getContent(filepath2);
+  const arr = buildDiff(contentBefore, contentAfter);
 
   return render(arr);
 };
