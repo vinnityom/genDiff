@@ -17,47 +17,41 @@ export default (filepath1, filepath2) => {
 
   const allProperties = _.union(_.keys(contentBefore), _.keys(contentAfter));
 
-  const arr = allProperties.reduce((acc, property) => {
+  const arr = allProperties.map((property) => {
     const valueOfFrom = contentBefore[property];
     const valueOfTo = contentAfter[property];
 
     if (_.has(contentBefore, property) && _.has(contentAfter, property)) {
       if (valueOfFrom === valueOfTo) {
-        return [
-          ...acc,
-          {
-            property,
-            status: 'unchanged',
-            value: valueOfFrom,
-          },
-        ];
+        return {
+          property,
+          status: 'unchanged',
+          value: valueOfFrom,
+        };
       }
 
-      return [
-        ...acc,
-        {
-          property,
-          status: 'changed',
-          valueBefore: valueOfFrom,
-          valueAfter: valueOfTo,
-        },
-      ];
+      return {
+        property,
+        status: 'changed',
+        valueBefore: valueOfFrom,
+        valueAfter: valueOfTo,
+      };
     }
 
     if (_.has(contentAfter, property)) {
-      return [...acc, {
+      return {
         property,
         status: 'added',
         value: valueOfTo,
-      }];
+      };
     }
 
-    return [...acc, {
+    return {
       property,
       status: 'deleted',
       value: valueOfFrom,
-    }];
-  }, []);
+    };
+  });
 
   return render(arr);
 };
