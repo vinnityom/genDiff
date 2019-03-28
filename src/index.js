@@ -2,6 +2,7 @@ import _ from 'lodash';
 import fs from 'fs';
 import path from 'path';
 import parse from './parsers';
+import render from './render';
 
 const getPath = pathString => path.resolve(pathString);
 
@@ -22,22 +23,41 @@ export default (filepath1, filepath2) => {
 
     if (_.has(contentBefore, property) && _.has(contentAfter, property)) {
       if (valueOfFrom === valueOfTo) {
-        return [...acc, `  ${property}: ${valueOfFrom}`];
+        return [
+          ...acc,
+          {
+            property,
+            status: 'unchanged',
+            value: valueOfFrom,
+          },
+        ];
       }
 
       return [
         ...acc,
-        `- ${property}: ${valueOfFrom}`,
-        `+ ${property}: ${valueOfTo}`,
+        {
+          property,
+          status: 'changed',
+          valueBefore: valueOfFrom,
+          valueAfter: valueOfTo,
+        },
       ];
     }
 
     if (_.has(contentAfter, property)) {
-      return [...acc, `+ ${property}: ${valueOfTo}`];
+      return [...acc, {
+        property,
+        status: 'added',
+        value: valueOfTo,
+      }];
     }
 
-    return [...acc, `- ${property}: ${valueOfFrom}`];
+    return [...acc, {
+      property,
+      status: 'deleted',
+      value: valueOfFrom,
+    }];
   }, []);
 
-  return `{\n  ${arr.join('\n  ')}\n}`;
+  return render(arr);
 };
