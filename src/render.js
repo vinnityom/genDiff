@@ -12,9 +12,10 @@ const stringify = (value, depth) => {
 };
 
 const methods = {
-  unchanged: (depth, property, value) => `  ${property}: ${value}`,
-  added: (depth, property, value) => `+ ${property}: ${value}`,
-  deleted: (depth, property, value) => `- ${property}: ${value}`,
+  unchanged: (depth, property, value) => `  ${property}: ${stringify(value)}`,
+  added: (depth, property, value) => `+ ${property}: ${stringify(value)}`,
+  deleted: (depth, property, value) => `- ${property}: ${stringify(value)}`,
+  updated: (depth, property, value) => `- ${property}: ${stringify(value.before)}\n+ ${property}: ${stringify(value.after)}`,
   nested: (depth, property, value, children) => `  ${property}: ${children}`,
 };
 
@@ -28,7 +29,7 @@ export default (ast) => {
       depth,
       element.status,
       element.property,
-      stringify(element.value, depth + 2),
+      element.value,
       genOutput(element.children, depth + 1),
     ));
 
