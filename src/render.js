@@ -1,40 +1,38 @@
 import _ from 'lodash';
 
-const sign = {
-  unchanged: ' ',
-  added: '+',
-  deleted: '-',
-};
+const makeTab = times => '  '.repeat(times);
 
-const getValueString = (value, shift) => {
+const stringify = (value, depth) => {
   if (!_.isObject(value)) {
     return value;
   }
 
-  const strings = _.keys(value).map(key => `${shift}${key}: ${value[key]}`);
-  return `{\n${shift}${strings.join(`\n${shift}`)}\n${shift}  }`;
+  const strings = _.keys(value).map(key => `  ${key}: ${value[key]}`);
+  return `{\n${strings.join('\n')}\n}`;
 };
 
+const methods = {
+  unchanged: (depth, property, value) => `  ${property}: ${value}`,
+  added: (depth, property, value) => `+ ${property}: ${value}`,
+  deleted: (depth, property, value) => `- ${property}: ${value}`,
+  nested: (depth, property, value, children) => `  ${property}: ${children}`,
+};
+
+const toString = (
+  depth, status, property, value, children,
+) => methods[status](depth, property, value, children);
+
 export default (ast) => {
-  const shift = times => '  '.repeat(times);
   const genOutput = (arr, depth) => {
-    const strings = arr.map((element) => {
-      const {
-        property, status, value, children,
-      } = element;
+    const strings = arr.map(element => toString(
+      depth,
+      element.status,
+      element.property,
+      stringify(element.value, depth + 2),
+      genOutput(element.children, depth + 1),
+    ));
 
-      if (children) {
-        return `${shift(depth)}${sign[status]} ${property}: ${genOutput(children, depth + 1)}`;
-      }
-
-      if (status === 'changed') {
-        return `${shift(depth)}- ${property}: ${getValueString(value.before, shift(depth + 1))}\n${shift(depth + 1)}+ ${property}: ${getValueString(value.after, shift(depth + 1))}`;
-      }
-
-      return `${shift(depth)}${sign[status]} ${property}: ${getValueString(value, shift(depth + 2))}`;
-    });
-
-    return `{\n${shift(depth - 1)}${strings.join('\n  ')}\n}`;
+    return `{\n${strings.join('\n')}\n}`;
   };
 
   return genOutput(ast, 1);
