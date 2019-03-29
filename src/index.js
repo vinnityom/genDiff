@@ -11,17 +11,14 @@ const getContent = (filepath) => {
   return parse(extention)(fs.readFileSync(getPath(filepath), 'utf-8'));
 };
 
-const buildAST = (property, status, value, children) => ({
-  property,
-  status,
-  value,
-  children,
+const buildAST = (property, status, value, children = []) => ({
+  property, status, value, children,
 });
 
 const buildDiff = (contentBefore, contentAfter) => {
   const properties = _.union(_.keys(contentBefore), _.keys(contentAfter));
 
-  return properties.map((property) => {
+  const arr = properties.map((property) => {
     const valueOfFrom = contentBefore[property];
     const valueOfTo = contentAfter[property];
 
@@ -31,10 +28,13 @@ const buildDiff = (contentBefore, contentAfter) => {
       }
 
       if (_.isObject(valueOfFrom) && _.isObject(valueOfTo)) {
-        return buildAST(property, 'unchanged', null, buildDiff(valueOfFrom, valueOfTo));
+        return buildAST(property, 'nested', null, buildDiff(valueOfFrom, valueOfTo));
       }
 
-      return buildAST(property, 'changed', { before: valueOfFrom, after: valueOfTo });
+      return [
+        buildAST(property, 'deleted', valueOfFrom),
+        buildAST(property, 'added', valueOfTo),
+      ];
     }
 
     if (_.has(contentAfter, property)) {
@@ -43,6 +43,8 @@ const buildDiff = (contentBefore, contentAfter) => {
 
     return buildAST(property, 'deleted', valueOfFrom);
   });
+
+  return _.flattenDeep(arr);
 };
 
 export default (filepath1, filepath2) => {
