@@ -11,46 +11,41 @@ const getContent = (filepath) => {
   return parse(extention)(fs.readFileSync(getPath(filepath), 'utf-8'));
 };
 
-const buildAST = (property, status, value, children = []) => ({
+const buildNode = (property, status, value, children = []) => ({
   property, status, value, children,
 });
 
 const buildDiff = (contentBefore, contentAfter) => {
   const properties = _.union(_.keys(contentBefore), _.keys(contentAfter));
 
-  const arr = properties.map((property) => {
+  return properties.map((property) => {
     const valueOfFrom = contentBefore[property];
     const valueOfTo = contentAfter[property];
 
     if (_.has(contentBefore, property) && _.has(contentAfter, property)) {
       if (valueOfFrom === valueOfTo) {
-        return buildAST(property, 'unchanged', valueOfFrom);
+        return buildNode(property, 'unchanged', valueOfFrom);
       }
 
       if (_.isObject(valueOfFrom) && _.isObject(valueOfTo)) {
-        return buildAST(property, 'nested', null, buildDiff(valueOfFrom, valueOfTo));
+        return buildNode(property, 'nested', null, buildDiff(valueOfFrom, valueOfTo));
       }
 
-      return [
-        buildAST(property, 'deleted', valueOfFrom),
-        buildAST(property, 'added', valueOfTo),
-      ];
+      return buildNode(property, 'updated', { before: valueOfFrom, after: valueOfTo });
     }
 
     if (_.has(contentAfter, property)) {
-      return buildAST(property, 'added', valueOfTo);
+      return buildNode(property, 'added', valueOfTo);
     }
 
-    return buildAST(property, 'deleted', valueOfFrom);
+    return buildNode(property, 'deleted', valueOfFrom);
   });
-
-  return _.flattenDeep(arr);
 };
 
 export default (filepath1, filepath2) => {
   const contentBefore = getContent(filepath1);
   const contentAfter = getContent(filepath2);
-  const arr = buildDiff(contentBefore, contentAfter);
+  const diff = buildDiff(contentBefore, contentAfter);
 
-  return render(arr);
+  return render(diff);
 };
