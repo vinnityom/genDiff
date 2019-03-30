@@ -42,7 +42,7 @@ const buildDiff = (contentBefore, contentAfter) => {
   });
 };
 
-export default (filepath1, filepath2, format = 'jsonLike') => {
+export default (filepath1, filepath2, format = 'cascade') => {
   const contentBefore = getContent(filepath1);
   const contentAfter = getContent(filepath2);
   const diff = buildDiff(contentBefore, contentAfter);
