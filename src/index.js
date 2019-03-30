@@ -2,7 +2,7 @@ import _ from 'lodash';
 import fs from 'fs';
 import path from 'path';
 import parse from './parsers';
-import render from './render';
+import render from './renderersFacade';
 
 const getPath = pathString => path.resolve(pathString);
 
@@ -42,10 +42,10 @@ const buildDiff = (contentBefore, contentAfter) => {
   });
 };
 
-export default (filepath1, filepath2) => {
+export default (filepath1, filepath2, format) => {
   const contentBefore = getContent(filepath1);
   const contentAfter = getContent(filepath2);
   const diff = buildDiff(contentBefore, contentAfter);
 
-  return render(diff);
+  return render(diff, format);
 };
