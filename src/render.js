@@ -7,16 +7,16 @@ const stringify = (value, depth) => {
     return value;
   }
 
-  const strings = _.keys(value).map(key => `  ${key}: ${value[key]}`);
-  return `{\n${strings.join('\n')}\n}`;
+  const strings = _.keys(value).map(key => `${makeTab(depth + 2)}  ${key}: ${value[key]}`);
+  return `{\n${strings.join('\n')}\n${makeTab(depth + 1)}}`;
 };
 
 const methods = {
-  unchanged: (depth, property, value) => `  ${property}: ${stringify(value)}`,
-  added: (depth, property, value) => `+ ${property}: ${stringify(value)}`,
-  deleted: (depth, property, value) => `- ${property}: ${stringify(value)}`,
-  updated: (depth, property, value) => `- ${property}: ${stringify(value.before)}\n+ ${property}: ${stringify(value.after)}`,
-  nested: (depth, property, value, children) => `  ${property}: ${children}`,
+  unchanged: (depth, property, value) => `${makeTab(depth)}  ${property}: ${stringify(value, depth)}`,
+  added: (depth, property, value) => `${makeTab(depth)}+ ${property}: ${stringify(value, depth)}`,
+  deleted: (depth, property, value) => `${makeTab(depth)}- ${property}: ${stringify(value, depth)}`,
+  updated: (depth, property, value) => `${makeTab(depth)}- ${property}: ${stringify(value.before, depth)}\n${makeTab(depth)}+ ${property}: ${stringify(value.after, depth)}`,
+  nested: (depth, property, value, children) => `${makeTab(depth)}  ${property}: {\n${children}\n${makeTab(depth + 1)}}`,
 };
 
 const toString = (
@@ -30,11 +30,11 @@ export default (ast) => {
       element.status,
       element.property,
       element.value,
-      genOutput(element.children, depth + 1),
+      genOutput(element.children, depth + 2),
     ));
 
-    return `{\n${strings.join('\n')}\n}`;
+    return `${strings.join('\n')}`;
   };
 
-  return genOutput(ast, 1);
+  return `{\n${genOutput(ast, 1)}\n}`;
 };
