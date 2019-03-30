@@ -11,13 +11,13 @@ const stringify = (value) => {
   return value;
 };
 
-const getName = names => names.join('.');
+const getName = properties => properties.join('.');
 
 const methods = {
-  unchanged: property => `Property '${property}' wasn't changed`,
-  added: (property, value) => `Property '${property}' was added with value: ${value}`,
-  deleted: property => `Property '${property}' was removed`,
-  updated: (property, currentValue, previousValue) => `Property '${property}' was updated. From ${previousValue} to ${currentValue}`,
+  unchanged: name => `Property '${name}' wasn't changed`,
+  added: (name, value) => `Property '${name}' was added with value: ${value}`,
+  deleted: name => `Property '${name}' was removed`,
+  updated: (name, currentValue, previousValue) => `Property '${name}' was updated. From ${previousValue} to ${currentValue}`,
   nested: (property, currentValue, previousValue, children) => `${children}`,
 };
 
