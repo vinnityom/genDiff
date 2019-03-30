@@ -11,8 +11,8 @@ const getContent = (filepath) => {
   return parse(extention)(fs.readFileSync(getPath(filepath), 'utf-8'));
 };
 
-const buildNode = (property, status, value, children = []) => ({
-  property, status, value, children,
+const buildNode = (property, status, currentValue, previousValue, children = []) => ({
+  property, status, currentValue, previousValue, children,
 });
 
 const buildDiff = (contentBefore, contentAfter) => {
@@ -28,10 +28,10 @@ const buildDiff = (contentBefore, contentAfter) => {
       }
 
       if (_.isObject(valueOfFrom) && _.isObject(valueOfTo)) {
-        return buildNode(property, 'nested', null, buildDiff(valueOfFrom, valueOfTo));
+        return buildNode(property, 'nested', null, null, buildDiff(valueOfFrom, valueOfTo));
       }
 
-      return buildNode(property, 'updated', { before: valueOfFrom, after: valueOfTo });
+      return buildNode(property, 'updated', valueOfTo, valueOfFrom);
     }
 
     if (_.has(contentAfter, property)) {
