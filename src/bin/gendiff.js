@@ -6,7 +6,7 @@ import compareConfigs from '..';
 program
   .version(version)
   .description('Compares two configuration files and shows a difference.')
-  .option('-f, --format', 'output format')
+  .option('-f, --format [format]', 'output format')
   .arguments('<firstConfig> <secondConfig>')
   .action((filepath1, filepath2) => {
     console.log(compareConfigs(filepath1, filepath2, program.format));
