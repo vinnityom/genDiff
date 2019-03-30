@@ -4,7 +4,7 @@ Property 'common.setting3' was updated. From true to [complex value]
 Property 'common.setting6.key' wasn't changed
 Property 'common.setting6.ops' was added with value: 'vops'
 Property 'common.follow' was added with value: false
-Property 'changed.setting4' was added with value: 'blah blah'
+Property 'common.setting4' was added with value: 'blah blah'
 Property 'common.setting5' was added with value: [complex value]
 Property 'group1.baz' was updated. From 'bas' to 'bars'
 Property 'group1.foo' wasn't changed
