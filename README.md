@@ -18,3 +18,6 @@
 
 ### and ini
 [![asciicast](https://asciinema.org/a/lQv5A8uTaBaVvMuxMOX7bkVxZ.svg)](https://asciinema.org/a/lQv5A8uTaBaVvMuxMOX7bkVxZ)
+
+## You can ask for plain output
+[![asciicast](https://asciinema.org/a/Su5X1nnbJaJ8p0Skv0ZbHqNhL.svg)](https://asciinema.org/a/Su5X1nnbJaJ8p0Skv0ZbHqNhL)
