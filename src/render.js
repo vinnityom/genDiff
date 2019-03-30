@@ -15,7 +15,7 @@ const methods = {
   unchanged: (depth, property, value) => `${makeTab(depth)}  ${property}: ${stringify(value, depth)}`,
   added: (depth, property, value) => `${makeTab(depth)}+ ${property}: ${stringify(value, depth)}`,
   deleted: (depth, property, value) => `${makeTab(depth)}- ${property}: ${stringify(value, depth)}`,
-  updated: (depth, property, currentValue, previousValue) => `${makeTab(depth)}- ${property}: ${stringify(previousValue, depth)}\n${makeTab(depth)}+ ${property}: ${stringify(currentValue, depth)}`,
+  updated: (depth, property, currentValue, previousValue) => [`${makeTab(depth)}- ${property}: ${stringify(previousValue, depth)}`, `${makeTab(depth)}+ ${property}: ${stringify(currentValue, depth)}`],
   nested: (depth, property, currentValue, previousValue, children) => `${makeTab(depth)}  ${property}: {\n${children}\n${makeTab(depth + 1)}}`,
 };
 
@@ -34,7 +34,7 @@ export default (ast) => {
       genOutput(element.children, depth + 2),
     ));
 
-    return `${strings.join('\n')}`;
+    return `${_.flattenDeep(strings).join('\n')}`;
   };
 
   return `{\n${genOutput(ast, 1)}\n}`;
