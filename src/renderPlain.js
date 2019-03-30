@@ -14,16 +14,18 @@ const stringify = (value) => {
 const getName = names => names.join('.');
 
 const methods = {
-  unchanged: property => `Property '${getName(property)}' wasn't changed`,
-  added: (property, value) => `Property '${getName(property)}' was added with value: ${value}`,
-  deleted: property => `Property '${getName(property)}' was removed`,
-  updated: (property, currentValue, previousValue) => `Property '${getName(property)}' was updated. From ${previousValue} to ${currentValue}`,
+  unchanged: property => `Property '${property}' wasn't changed`,
+  added: (property, value) => `Property '${property}' was added with value: ${value}`,
+  deleted: property => `Property '${property}' was removed`,
+  updated: (property, currentValue, previousValue) => `Property '${property}' was updated. From ${previousValue} to ${currentValue}`,
   nested: (property, currentValue, previousValue, children) => `${children}`,
 };
 
 const toString = (
   status, property, currentValue, previousValue, children,
-) => methods[status](property, stringify(currentValue), stringify(previousValue), children);
+) => methods[status](
+  getName(property), stringify(currentValue), stringify(previousValue), children,
+);
 
 export default (diff) => {
   const genOutput = (arr, previousProperties) => {

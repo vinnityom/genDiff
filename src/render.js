@@ -12,16 +12,18 @@ const stringify = (value, depth) => {
 };
 
 const methods = {
-  unchanged: (depth, property, value) => `${makeTab(depth)}  ${property}: ${stringify(value, depth)}`,
-  added: (depth, property, value) => `${makeTab(depth)}+ ${property}: ${stringify(value, depth)}`,
-  deleted: (depth, property, value) => `${makeTab(depth)}- ${property}: ${stringify(value, depth)}`,
-  updated: (depth, property, currentValue, previousValue) => [`${makeTab(depth)}- ${property}: ${stringify(previousValue, depth)}`, `${makeTab(depth)}+ ${property}: ${stringify(currentValue, depth)}`],
+  unchanged: (depth, property, value) => `${makeTab(depth)}  ${property}: ${value}`,
+  added: (depth, property, value) => `${makeTab(depth)}+ ${property}: ${value}`,
+  deleted: (depth, property, value) => `${makeTab(depth)}- ${property}: ${value}`,
+  updated: (depth, property, currentValue, previousValue) => [`${makeTab(depth)}- ${property}: ${previousValue}`, `${makeTab(depth)}+ ${property}: ${currentValue}`],
   nested: (depth, property, currentValue, previousValue, children) => `${makeTab(depth)}  ${property}: {\n${children}\n${makeTab(depth + 1)}}`,
 };
 
 const toString = (
   depth, status, property, currentValue, previousValue, children,
-) => methods[status](depth, property, currentValue, previousValue, children);
+) => methods[status](
+  depth, property, stringify(currentValue, depth), stringify(previousValue, depth), children,
+);
 
 export default (ast) => {
   const genOutput = (arr, depth) => {
