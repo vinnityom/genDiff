@@ -11,10 +11,10 @@
 
 ## And use!
 ### Works with JSON
-[![asciicast](https://asciinema.org/a/scIYaKzF41R2mcUstGXlaaxul.svg)](https://asciinema.org/a/scIYaKzF41R2mcUstGXlaaxul)
+[![asciicast](https://asciinema.org/a/yByRW955WJVpBT1uHrj5J6I1E.svg)](https://asciinema.org/a/yByRW955WJVpBT1uHrj5J6I1E)
 
 ### yaml
-[![asciicast](https://asciinema.org/a/ESsvce4pQuz61gvj9L6AR9aKe.svg)](https://asciinema.org/a/ESsvce4pQuz61gvj9L6AR9aKe)
+[![asciicast](https://asciinema.org/a/qZYphLweq4FAKRQ95UFwZDRYh.svg)](https://asciinema.org/a/qZYphLweq4FAKRQ95UFwZDRYh)
 
 ### and ini
-[![asciicast](https://asciinema.org/a/eOUguUKBGeieiz4auCSqP7dpP.svg)](https://asciinema.org/a/eOUguUKBGeieiz4auCSqP7dpP)
+[![asciicast](https://asciinema.org/a/lQv5A8uTaBaVvMuxMOX7bkVxZ.svg)](https://asciinema.org/a/lQv5A8uTaBaVvMuxMOX7bkVxZ)
