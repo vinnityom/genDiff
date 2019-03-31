@@ -5,15 +5,16 @@ import _ from 'lodash';
 const iniParse = (data) => {
   const parsedData = ini.parse(data);
   const numbersToString = object => _.keys(object).reduce((acc, key) => {
-    if (typeof object[key] === 'number') {
-      const newData = object[key].toString();
-      return { ...acc, [key]: newData };
+    const currentValue = object[key];
+    if (typeof currentValue === 'number') {
+      const newValue = currentValue.toString();
+      return { ...acc, [key]: newValue };
     }
-    if (_.isObject(object[key])) {
-      return { ...acc, [key]: numbersToString(object[key]) };
+    if (_.isObject(currentValue)) {
+      return { ...acc, [key]: numbersToString(currentValue) };
     }
 
-    return { ...acc, [key]: object[key] };
+    return { ...acc, [key]: currentValue };
   }, {});
 
   return numbersToString(parsedData);
