@@ -16,24 +16,30 @@ const methods = {
   added: (depth, property, value) => `${makeTab(depth)}+ ${property}: ${value}`,
   deleted: (depth, property, value) => `${makeTab(depth)}- ${property}: ${value}`,
   updated: (depth, property, currentValue, previousValue) => [`${makeTab(depth)}- ${property}: ${previousValue}`, `${makeTab(depth)}+ ${property}: ${currentValue}`],
-  nested: (depth, property, currentValue, previousValue, children) => `${makeTab(depth)}  ${property}: {\n${children}\n${makeTab(depth + 1)}}`,
+  nested: (depth, property, currentValue, previousValue, children, process) => `${makeTab(depth)}  ${property}: {\n${process(children, depth + 2)}\n${makeTab(depth + 1)}}`,
 };
 
 const toString = (
-  depth, type, property, currentValue, previousValue, children,
+  process, depth, type, property, currentValue, previousValue, children,
 ) => methods[type](
-  depth, property, stringify(currentValue, depth), stringify(previousValue, depth), children,
+  depth,
+  property,
+  stringify(currentValue, depth),
+  stringify(previousValue, depth),
+  children,
+  process,
 );
 
 export default (ast) => {
   const genOutput = (arr, depth) => {
     const lines = arr.map(element => toString(
+      genOutput,
       depth,
       element.type,
       element.property,
       element.currentValue,
       element.previousValue,
-      genOutput(element.children, depth + 2),
+      element.children,
     ));
 
     return `${_.flattenDeep(lines).join('\n')}`;

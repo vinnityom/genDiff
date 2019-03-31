@@ -14,27 +14,28 @@ const stringify = (value) => {
 const getName = properties => properties.join('.');
 
 const methods = {
-  unchanged: name => `Property '${name}' wasn't changed`,
-  added: (name, value) => `Property '${name}' was added with value: ${value}`,
-  deleted: name => `Property '${name}' was removed`,
-  updated: (name, currentValue, previousValue) => `Property '${name}' was updated. From ${previousValue} to ${currentValue}`,
-  nested: (property, currentValue, previousValue, children) => `${children}`,
+  unchanged: properties => `Property '${getName(properties)}' wasn't changed`,
+  added: (properties, value) => `Property '${getName(properties)}' was added with value: ${value}`,
+  deleted: properties => `Property '${getName(properties)}' was removed`,
+  updated: (properties, currentValue, previousValue) => `Property '${getName(properties)}' was updated. From ${previousValue} to ${currentValue}`,
+  nested: (properties, currentValue, previousValue, children, proccess) => `${proccess(children, properties)}`,
 };
 
 const toString = (
-  type, property, currentValue, previousValue, children,
+  proccess, type, properties, currentValue, previousValue, children,
 ) => methods[type](
-  getName(property), stringify(currentValue), stringify(previousValue), children,
+  properties, stringify(currentValue), stringify(previousValue), children, proccess,
 );
 
 export default (diff) => {
   const genOutput = (arr, previousProperties) => {
     const lines = arr.map(node => toString(
+      genOutput,
       node.type,
       [...previousProperties, node.property],
       node.currentValue,
       node.previousValue,
-      genOutput(node.children, [...previousProperties, node.property]),
+      node.children,
     ));
     return `${lines.join('\n')}`;
   };
