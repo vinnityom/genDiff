@@ -28,7 +28,7 @@ describe('should make plain format right', () => {
 });
 
 describe('should make json format right', () => {
-  const expected = fs.readFileSync('__tests__/__fixtures__/expectedJSONOutput', 'utf-8');
+  const expected = fs.readFileSync('__tests__/__fixtures__/expectedJSONOutput.json', 'utf-8');
 
   test.each([
     ['JSON', '__tests__/__fixtures__/JSON/before.json', '__tests__/__fixtures__/JSON/after.json', expected],
