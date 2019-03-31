@@ -1,3 +1,1 @@
-export default (diff) => {
-  console.log('json');
-};
+export default diff => JSON.stringify(diff);
