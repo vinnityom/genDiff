@@ -1,6 +1,6 @@
-import renderCascade from './renderers/renderCascade';
-import plainRender from './renderers/renderPlain';
-import renderJSON from './renderers/renderJSON';
+import renderCascade from './renderCascade';
+import plainRender from './renderPlain';
+import renderJSON from './renderJSON';
 
 const renderMethods = {
   plain: plainRender,
