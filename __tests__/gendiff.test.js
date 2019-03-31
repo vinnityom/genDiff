@@ -1,5 +1,6 @@
 import fs from 'fs';
 import genDiff from '../src';
+import * as json from './__fixtures__/expectedJSONOutput';
 
 describe('should make cascade format right', () => {
   const expected = fs.readFileSync('__tests__/__fixtures__/expectedResult', 'utf-8');
@@ -28,7 +29,7 @@ describe('should make plain format right', () => {
 });
 
 describe('should make json format right', () => {
-  const expected = fs.readFileSync('__tests__/__fixtures__/expectedJSONOutput.json', 'utf-8');
+  const expected = json;
 
   test.each([
     ['JSON', '__tests__/__fixtures__/JSON/before.json', '__tests__/__fixtures__/JSON/after.json', expected],
