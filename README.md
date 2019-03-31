@@ -21,3 +21,6 @@
 
 ## You can ask for plain output
 [![asciicast](https://asciinema.org/a/Su5X1nnbJaJ8p0Skv0ZbHqNhL.svg)](https://asciinema.org/a/Su5X1nnbJaJ8p0Skv0ZbHqNhL)
+
+## Or output in JSON format
+[![asciicast](https://asciinema.org/a/5mn0u4t96LZbTmgxgFI6XHIsZ.svg)](https://asciinema.org/a/5mn0u4t96LZbTmgxgFI6XHIsZ)
