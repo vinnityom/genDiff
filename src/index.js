@@ -11,8 +11,8 @@ const getContent = (filepath) => {
   return parse(extention)(fs.readFileSync(getPath(filepath), 'utf-8'));
 };
 
-const buildNode = (property, status, currentValue, previousValue, children = []) => ({
-  property, status, currentValue, previousValue, children,
+const buildNode = (property, type, currentValue, previousValue, children = []) => ({
+  property, type, currentValue, previousValue, children,
 });
 
 const buildDiff = (contentBefore, contentAfter) => {

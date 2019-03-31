@@ -22,21 +22,21 @@ const methods = {
 };
 
 const toString = (
-  status, property, currentValue, previousValue, children,
-) => methods[status](
+  type, property, currentValue, previousValue, children,
+) => methods[type](
   getName(property), stringify(currentValue), stringify(previousValue), children,
 );
 
 export default (diff) => {
   const genOutput = (arr, previousProperties) => {
-    const strings = arr.map(node => toString(
-      node.status,
+    const differences = arr.map(node => toString(
+      node.type,
       [...previousProperties, node.property],
       node.currentValue,
       node.previousValue,
       genOutput(node.children, [...previousProperties, node.property]),
     ));
-    return `${strings.join('\n')}`;
+    return `${differences.join('\n')}`;
   };
 
   return genOutput(diff, []);

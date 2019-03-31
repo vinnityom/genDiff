@@ -7,8 +7,8 @@ const stringify = (value, depth) => {
     return value;
   }
 
-  const strings = _.keys(value).map(key => `${makeTab(depth + 2)}  ${key}: ${value[key]}`);
-  return `{\n${strings.join('\n')}\n${makeTab(depth + 1)}}`;
+  const properties = _.keys(value).map(key => `${makeTab(depth + 2)}  ${key}: ${value[key]}`);
+  return `{\n${properties.join('\n')}\n${makeTab(depth + 1)}}`;
 };
 
 const methods = {
@@ -20,23 +20,23 @@ const methods = {
 };
 
 const toString = (
-  depth, status, property, currentValue, previousValue, children,
-) => methods[status](
+  depth, type, property, currentValue, previousValue, children,
+) => methods[type](
   depth, property, stringify(currentValue, depth), stringify(previousValue, depth), children,
 );
 
 export default (ast) => {
   const genOutput = (arr, depth) => {
-    const strings = arr.map(element => toString(
+    const differences = arr.map(element => toString(
       depth,
-      element.status,
+      element.type,
       element.property,
       element.currentValue,
       element.previousValue,
       genOutput(element.children, depth + 2),
     ));
 
-    return `${_.flattenDeep(strings).join('\n')}`;
+    return `${_.flattenDeep(differences).join('\n')}`;
   };
 
   return `{\n${genOutput(ast, 1)}\n}`;
