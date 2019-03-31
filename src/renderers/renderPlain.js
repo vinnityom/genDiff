@@ -29,14 +29,14 @@ const toString = (
 
 export default (diff) => {
   const genOutput = (arr, previousProperties) => {
-    const differences = arr.map(node => toString(
+    const lines = arr.map(node => toString(
       node.type,
       [...previousProperties, node.property],
       node.currentValue,
       node.previousValue,
       genOutput(node.children, [...previousProperties, node.property]),
     ));
-    return `${differences.join('\n')}`;
+    return `${lines.join('\n')}`;
   };
 
   return genOutput(diff, []);
