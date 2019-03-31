@@ -10,7 +10,7 @@ describe('sould get diff right', () => {
     ['ini', '__tests__/__fixtures__/ini/before.ini', '__tests__/__fixtures__/ini/after.ini', expected],
   ])('testing %s format',
     (ext, filepath1, filepath2, expectedResult) => {
-      expect(genDiff(filepath1, filepath2, 'jsonLike')).toBe(expectedResult);
+      expect(genDiff(filepath1, filepath2, 'cascade')).toBe(expectedResult);
     });
 });
 
