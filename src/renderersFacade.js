@@ -1,5 +1,5 @@
-import renderCascade from './renderCascade';
-import plainRender from './renderPlain';
+import renderCascade from './renderers/renderCascade';
+import plainRender from './renderers/renderPlain';
 
 const renderMethods = {
   plain: plainRender,
