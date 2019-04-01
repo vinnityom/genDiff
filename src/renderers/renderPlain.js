@@ -14,18 +14,18 @@ const stringify = (value) => {
 const getName = properties => properties.join('.');
 
 const methods = {
-  unchanged: (ancestry, { property }) => `Property '${getName([...ancestry, property])}' wasn't changed`,
-  added: (ancestry, { property, currentValue: value }) => `Property '${getName([...ancestry, property])}' was added with value: ${stringify(value)}`,
-  deleted: (ancestry, { property }) => `Property '${getName([...ancestry, property])}' was removed`,
-  updated: (ancestry, { property, currentValue, previousValue }) => `Property '${getName([...ancestry, property])}' was updated. From ${stringify(previousValue)} to ${stringify(currentValue)}`,
-  nested: (ancestry, { property, children }, proccess) => `${proccess(children, [...ancestry, property])}`,
+  unchanged: (ancestors, { property }) => `Property '${getName([...ancestors, property])}' wasn't changed`,
+  added: (ancestors, { property, currentValue: value }) => `Property '${getName([...ancestors, property])}' was added with value: ${stringify(value)}`,
+  deleted: (ancestors, { property }) => `Property '${getName([...ancestors, property])}' was removed`,
+  updated: (ancestors, { property, currentValue, previousValue }) => `Property '${getName([...ancestors, property])}' was updated. From ${stringify(previousValue)} to ${stringify(currentValue)}`,
+  nested: (ancestors, { property, children }, proccess) => `${proccess(children, [...ancestors, property])}`,
 };
 
-const toString = (proccess, ancestry, node) => methods[node.type](ancestry, node, proccess);
+const toString = (proccess, ancestors, node) => methods[node.type](ancestors, node, proccess);
 
 export default (diff) => {
-  const genOutput = (arr, ancestry) => {
-    const lines = arr.map(node => toString(genOutput, ancestry, node));
+  const genOutput = (arr, ancestors) => {
+    const lines = arr.map(node => toString(genOutput, ancestors, node));
 
     return `${lines.join('\n')}`;
   };
