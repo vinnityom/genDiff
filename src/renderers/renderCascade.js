@@ -12,35 +12,18 @@ const stringify = (value, depth) => {
 };
 
 const methods = {
-  unchanged: (depth, property, value) => `${makeTab(depth)}  ${property}: ${value}`,
-  added: (depth, property, value) => `${makeTab(depth)}+ ${property}: ${value}`,
-  deleted: (depth, property, value) => `${makeTab(depth)}- ${property}: ${value}`,
-  updated: (depth, property, currentValue, previousValue) => [`${makeTab(depth)}- ${property}: ${previousValue}`, `${makeTab(depth)}+ ${property}: ${currentValue}`],
-  nested: (depth, property, currentValue, previousValue, children, process) => `${makeTab(depth)}  ${property}: {\n${process(children, depth + 2)}\n${makeTab(depth + 1)}}`,
+  unchanged: (depth, { property, currentValue: value }) => `${makeTab(depth)}  ${property}: ${stringify(value, depth)}`,
+  added: (depth, { property, currentValue: value }) => `${makeTab(depth)}+ ${property}: ${stringify(value, depth)}`,
+  deleted: (depth, { property, currentValue: value }) => `${makeTab(depth)}- ${property}: ${stringify(value, depth)}`,
+  updated: (depth, { property, currentValue, previousValue }) => [`${makeTab(depth)}- ${property}: ${stringify(previousValue, depth)}`, `${makeTab(depth)}+ ${property}: ${stringify(currentValue, depth)}`],
+  nested: (depth, { property, children }, process) => `${makeTab(depth)}  ${property}: {\n${process(children, depth + 2)}\n${makeTab(depth + 1)}}`,
 };
 
-const toString = (
-  process, depth, type, property, currentValue, previousValue, children,
-) => methods[type](
-  depth,
-  property,
-  stringify(currentValue, depth),
-  stringify(previousValue, depth),
-  children,
-  process,
-);
+const toString = (process, depth, node) => methods[node.type](depth, node, process);
 
 export default (ast) => {
   const genOutput = (arr, depth) => {
-    const lines = arr.map(element => toString(
-      genOutput,
-      depth,
-      element.type,
-      element.property,
-      element.currentValue,
-      element.previousValue,
-      element.children,
-    ));
+    const lines = arr.map(node => toString(genOutput, depth, node));
 
     return `${_.flattenDeep(lines).join('\n')}`;
   };

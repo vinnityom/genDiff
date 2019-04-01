@@ -14,29 +14,19 @@ const stringify = (value) => {
 const getName = properties => properties.join('.');
 
 const methods = {
-  unchanged: properties => `Property '${getName(properties)}' wasn't changed`,
-  added: (properties, value) => `Property '${getName(properties)}' was added with value: ${value}`,
-  deleted: properties => `Property '${getName(properties)}' was removed`,
-  updated: (properties, currentValue, previousValue) => `Property '${getName(properties)}' was updated. From ${previousValue} to ${currentValue}`,
-  nested: (properties, currentValue, previousValue, children, proccess) => `${proccess(children, properties)}`,
+  unchanged: (ancestry, { property }) => `Property '${getName([...ancestry, property])}' wasn't changed`,
+  added: (ancestry, { property, currentValue: value }) => `Property '${getName([...ancestry, property])}' was added with value: ${stringify(value)}`,
+  deleted: (ancestry, { property }) => `Property '${getName([...ancestry, property])}' was removed`,
+  updated: (ancestry, { property, currentValue, previousValue }) => `Property '${getName([...ancestry, property])}' was updated. From ${stringify(previousValue)} to ${stringify(currentValue)}`,
+  nested: (ancestry, { property, children }, proccess) => `${proccess(children, [...ancestry, property])}`,
 };
 
-const toString = (
-  proccess, type, properties, currentValue, previousValue, children,
-) => methods[type](
-  properties, stringify(currentValue), stringify(previousValue), children, proccess,
-);
+const toString = (proccess, ancestry, node) => methods[node.type](ancestry, node, proccess);
 
 export default (diff) => {
-  const genOutput = (arr, previousProperties) => {
-    const lines = arr.map(node => toString(
-      genOutput,
-      node.type,
-      [...previousProperties, node.property],
-      node.currentValue,
-      node.previousValue,
-      node.children,
-    ));
+  const genOutput = (arr, ancestry) => {
+    const lines = arr.map(node => toString(genOutput, ancestry, node));
+
     return `${lines.join('\n')}`;
   };
 
