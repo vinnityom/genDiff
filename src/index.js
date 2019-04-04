@@ -11,9 +11,47 @@ const getContent = (filepath) => {
   return parse(extention)(fs.readFileSync(getPath(filepath), 'utf-8'));
 };
 
-const buildNode = (property, type, currentValue, previousValue, children = []) => ({
-  property, type, currentValue, previousValue, children,
-});
+const nodeDispatcher = [
+  {
+    type: 'unchanged',
+    check: (firstValue, secondValue) => (firstValue === secondValue),
+    process: (property, type, currentValue) => ({
+      property, type, currentValue,
+    }),
+  },
+  {
+    type: 'nested',
+    check: (firstValue, secondValue) => (_.isObject(firstValue) && _.isObject(secondValue)),
+    process: (property, type, currentValue, previousValue, buildDiff) => ({
+      property,
+      type,
+      currentValue: null,
+      previousValue: null,
+      children: buildDiff(previousValue, currentValue),
+    }),
+  },
+  {
+    type: 'added',
+    check: firstValue => (!firstValue),
+    process: (property, type, currentValue) => ({
+      property, type, currentValue,
+    }),
+  },
+  {
+    type: 'deleted',
+    check: (firstValue, secondValue) => (!secondValue),
+    process: (property, type, currentValue, previousValue) => ({
+      property, type, currentValue: previousValue,
+    }),
+  },
+  {
+    type: 'updated',
+    check: (firstValue, secondValue) => (firstValue !== secondValue),
+    process: (property, type, currentValue, previousValue) => ({
+      property, type, currentValue, previousValue,
+    }),
+  },
+];
 
 const buildDiff = (contentBefore, contentAfter) => {
   const properties = _.union(_.keys(contentBefore), _.keys(contentAfter));
@@ -22,23 +60,10 @@ const buildDiff = (contentBefore, contentAfter) => {
     const valueOfFrom = contentBefore[property];
     const valueOfTo = contentAfter[property];
 
-    if (_.has(contentBefore, property) && _.has(contentAfter, property)) {
-      if (valueOfFrom === valueOfTo) {
-        return buildNode(property, 'unchanged', valueOfFrom);
-      }
-
-      if (_.isObject(valueOfFrom) && _.isObject(valueOfTo)) {
-        return buildNode(property, 'nested', null, null, buildDiff(valueOfFrom, valueOfTo));
-      }
-
-      return buildNode(property, 'updated', valueOfTo, valueOfFrom);
-    }
-
-    if (_.has(contentAfter, property)) {
-      return buildNode(property, 'added', valueOfTo);
-    }
-
-    return buildNode(property, 'deleted', valueOfFrom);
+    const { type, process } = _.find(
+      nodeDispatcher, element => element.check(valueOfFrom, valueOfTo),
+    );
+    return process(property, type, valueOfTo, valueOfFrom, buildDiff);
   });
 };
 

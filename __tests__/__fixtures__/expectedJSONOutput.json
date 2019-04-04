@@ -7,14 +7,12 @@
         "children": [{
                 "property": "setting1",
                 "type": "unchanged",
-                "currentValue": "Value 1",
-                "children":[]
+                "currentValue": "Value 1"
             },
             {
                 "property": "setting2",
                 "type": "deleted",
-                "currentValue": "200",
-                "children":[]
+                "currentValue": "200"
             },
             {
                 "property": "setting3",
@@ -22,8 +20,7 @@
                 "currentValue": {
                     "key": "value"
                 },
-                "previousValue": true,
-                "children":[]
+                "previousValue": true
             },
             {
                 "property": "setting6",
@@ -33,34 +30,30 @@
                 "children": [{
                         "property": "key",
                         "type":"unchanged",
-                        "currentValue":"value",
-                        "children":[]
+                        "currentValue":"value"
                     },
                     {
                         "property": "ops",
                         "type": "added",
-                        "currentValue": "vops",
-                        "children":[]
+                        "currentValue": "vops"
                     }]
             },
             {
                 "property": "follow",
                 "type": "added",
-                "currentValue": false,
-                "children":[]
+                "currentValue": false
             },
             {
                 "property": "setting4",
                 "type": "added",
-                "currentValue": "blah blah",
-                "children":[]
+                "currentValue": "blah blah"
             },
             {
                 "property": "setting5",
                 "type": "added",
                 "currentValue": {
                     "key5": "value5"
-                },"children": []
+                }
             }]
     },
     {
@@ -72,14 +65,12 @@
             "property": "baz",
             "type": "updated",
             "currentValue": "bars",
-            "previousValue": "bas",
-            "children":[]
+            "previousValue": "bas"
         },
         {
             "property": "foo",
             "type": "unchanged",
-            "currentValue": "bar",
-            "children":[]
+            "currentValue": "bar"
         },
         {
             "property": "nest",
@@ -87,8 +78,7 @@
             "currentValue": "str",
             "previousValue": {
                 "key": "value"
-            },
-            "children": []
+            }
         }]
     },
     {
@@ -96,15 +86,13 @@
         "type": "deleted",
         "currentValue": {
             "abc": "12345"
-        },
-        "children":[]
+        }
     },
     {
         "property": "group3",
         "type": "added",
         "currentValue": {
             "fee": "100500"
-        },
-        "children":[]
+        }
     }
 ]
