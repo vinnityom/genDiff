@@ -1,6 +1,6 @@
 {
   "name": "artyoms-gendiff",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "my own gendiff app for study project",
   "main": "dist/index.js",
   "bin": {
