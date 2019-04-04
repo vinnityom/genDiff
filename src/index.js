@@ -14,14 +14,15 @@ const getContent = (filepath) => {
 const nodeDispatcher = [
   {
     type: 'unchanged',
-    check: (firstValue, secondValue) => (firstValue === secondValue),
+    check: (key, firstConfig, secondConfig) => (firstConfig[key] === secondConfig[key]),
     process: (property, type, currentValue) => ({
       property, type, currentValue,
     }),
   },
   {
     type: 'nested',
-    check: (firstValue, secondValue) => (_.isObject(firstValue) && _.isObject(secondValue)),
+    check: (key, firstConfig, secondConfig) => (
+      _.isObject(firstConfig[key]) && _.isObject(secondConfig[key])),
     process: (property, type, currentValue, previousValue, buildDiff) => ({
       property,
       type,
@@ -32,21 +33,21 @@ const nodeDispatcher = [
   },
   {
     type: 'added',
-    check: firstValue => (!firstValue),
+    check: (key, firstConfig) => (!_.has(firstConfig, key)),
     process: (property, type, currentValue) => ({
       property, type, currentValue,
     }),
   },
   {
     type: 'deleted',
-    check: (firstValue, secondValue) => (!secondValue),
+    check: (key, firstConfig, secondConfig) => (!_.has(secondConfig, key)),
     process: (property, type, currentValue, previousValue) => ({
       property, type, currentValue: previousValue,
     }),
   },
   {
     type: 'updated',
-    check: (firstValue, secondValue) => (firstValue !== secondValue),
+    check: (key, firstConfig, secondConfig) => (firstConfig[key] !== secondConfig[key]),
     process: (property, type, currentValue, previousValue) => ({
       property, type, currentValue, previousValue,
     }),
@@ -57,13 +58,10 @@ const buildDiff = (contentBefore, contentAfter) => {
   const properties = _.union(_.keys(contentBefore), _.keys(contentAfter));
 
   return properties.map((property) => {
-    const valueOfFrom = contentBefore[property];
-    const valueOfTo = contentAfter[property];
-
     const { type, process } = _.find(
-      nodeDispatcher, element => element.check(valueOfFrom, valueOfTo),
+      nodeDispatcher, element => element.check(property, contentBefore, contentAfter),
     );
-    return process(property, type, valueOfTo, valueOfFrom, buildDiff);
+    return process(property, type, contentAfter[property], contentBefore[property], buildDiff);
   });
 };
 
