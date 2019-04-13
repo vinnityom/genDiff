@@ -15,17 +15,13 @@ const nodeDispatcher = [
   {
     type: 'unchanged',
     check: (key, firstConfig, secondConfig) => (firstConfig[key] === secondConfig[key]),
-    process: (property, type, currentValue) => ({
-      property, type, currentValue,
-    }),
+    process: currentValue => ({ currentValue }),
   },
   {
     type: 'nested',
     check: (key, firstConfig, secondConfig) => (
       _.isObject(firstConfig[key]) && _.isObject(secondConfig[key])),
-    process: (property, type, currentValue, previousValue, buildDiff) => ({
-      property,
-      type,
+    process: (currentValue, previousValue, buildDiff) => ({
       currentValue: null,
       previousValue: null,
       children: buildDiff(previousValue, currentValue),
@@ -34,22 +30,20 @@ const nodeDispatcher = [
   {
     type: 'added',
     check: (key, firstConfig) => (!_.has(firstConfig, key)),
-    process: (property, type, currentValue) => ({
-      property, type, currentValue,
-    }),
+    process: currentValue => ({ currentValue }),
   },
   {
     type: 'deleted',
     check: (key, firstConfig, secondConfig) => (!_.has(secondConfig, key)),
-    process: (property, type, currentValue, previousValue) => ({
-      property, type, currentValue: previousValue,
+    process: (currentValue, previousValue) => ({
+      currentValue: previousValue,
     }),
   },
   {
     type: 'updated',
     check: (key, firstConfig, secondConfig) => (firstConfig[key] !== secondConfig[key]),
-    process: (property, type, currentValue, previousValue) => ({
-      property, type, currentValue, previousValue,
+    process: (currentValue, previousValue) => ({
+      currentValue, previousValue,
     }),
   },
 ];
@@ -61,7 +55,9 @@ const buildDiff = (contentBefore, contentAfter) => {
     const { type, process } = _.find(
       nodeDispatcher, element => element.check(property, contentBefore, contentAfter),
     );
-    return process(property, type, contentAfter[property], contentBefore[property], buildDiff);
+    return {
+      property, type, ...process(contentAfter[property], contentBefore[property], buildDiff),
+    };
   });
 };
 
